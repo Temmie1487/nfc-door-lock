@@ -1,0 +1,7 @@
+.pio/
+.vscode/
+*.log
+*.bin
+*.elf
+*.hex
+*.uf2
