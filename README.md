@@ -1,5 +1,10 @@
 # NFC Smart Door Lock System
 
+[中文](#zhongwen) | [English](#english)
+
+<details>
+<summary><h2 id="zhongwen">📖 中文文档 (点击展开)</h2></summary>
+
 基于ESP32的智能门禁系统，使用PN532 NFC模块（HSU模式）、继电器控制电磁锁，并配备门磁传感器实现自动上锁功能。
 
 ## 快速开始
@@ -141,17 +146,49 @@ nfc-door-lock/
 
 本项目采用 [Apache License 2.0](LICENSE) 开源协议。
 
+</details>
+
 ---
 
-## English
+<details>
+<summary><h2 id="english">📖 English Documentation (Click to expand)</h2></summary>
 
 ### Overview
 
-This is an ESP32-based smart door lock system featuring NFC card authentication via PN532 module (HSU mode), relay-controlled electromagnetic lock, and automatic lock functionality with door sensor.
+An ESP32-based smart door lock system using PN532 NFC module (HSU mode), relay-controlled electromagnetic lock, and door sensor for automatic lock functionality.
+
+### Requirements
+
+- VS Code + PlatformIO IDE extension
+- ESP32 DevKit board
+- PN532 NFC module (configured for HSU/UART mode)
+
+### Quick Start
+
+1. Clone the project:
+```bash
+git clone https://github.com/Temmie1487/nfc-door-lock.git
+cd nfc-door-lock
+```
+
+2. Configure authorized card UIDs (`src/config.h`):
+```cpp
+static const NFCCard authorizedCards[] = {
+    {{0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 4},  // Replace with your card UID
+};
+```
+
+3. Build and upload:
+```bash
+platformio run
+platformio run --target upload
+```
+
+4. Monitor serial output (baud rate: 115200)
 
 ### Features
 
-- ✅ NFC card reading and authorization
+- ✅ NFC card reading and authorization verification
 - ✅ Physical button unlock
 - ✅ Door sensor monitoring
 - ✅ Auto-lock after door close (2-second confirmation)
@@ -168,24 +205,93 @@ This is an ESP32-based smart door lock system featuring NFC card authentication 
 | PN532 RX | GPIO16 | ESP32 RX |
 | PN532 TX | GPIO17 | ESP32 TX |
 
-### Quick Start
+> ⚠️ PN532 must be configured for HSU/UART mode; TX/RX must be cross-connected
 
-1. Clone the project:
-```bash
-git clone https://github.com/Temmie1487/nfc-door-lock.git
-cd nfc-door-lock
+For detailed wiring instructions, see [Hardware Wiring Guide](docs/硬件接线指南.md)
+
+### Project Structure
+
+```
+nfc-door-lock/
+├── docs/                      # Documentation
+│   ├── 硬件接线指南.md
+│   └── PlatformIO烧录指南.md
+├── include/                   # PN532 library
+│   ├── PN532/
+│   └── PN532_HSU/
+├── src/
+│   ├── main.cpp              # Main entry point
+│   ├── config.h              # Config (pins/timing/authorized cards)
+│   ├── hardware/             # Hardware abstraction layer
+│   │   ├── nfc.cpp/h         # NFC reader module
+│   │   ├── relay.cpp/h       # Relay control
+│   │   ├── button.cpp/h      # Button detection
+│   │   ├── door_sensor.cpp/h # Door sensor
+│   │   └── logger.cpp/h      # Serial logging
+│   └── logic/                # Business logic layer
+│       ├── door_lock_state.cpp/h  # Door lock state machine
+│       └── access_control.cpp/h   # Access control
+├── platformio.ini            # PlatformIO config
+├── README.md
+└── LICENSE                   # Apache 2.0
 ```
 
-2. Configure authorized card UIDs in `src/config.h`
+### System Workflow
 
-3. Build and upload:
-```bash
-platformio run
-platformio run --target upload
+```
+1. System startup → Initialize all modules
+2. Input detection:
+   - NFC card swipe → Verify UID → Unlock if authorized
+   - Button press → Direct unlock
+3. Post-unlock monitoring:
+   - Door opened → Wait for door to close
+   - Door closed for 2 seconds → Confirm closed → Auto-lock
+   - No action for 10 seconds → Safety timeout → Auto-lock
 ```
 
-4. Monitor serial output at 115200 baud
+### Configuration
+
+All configurations are in `src/config.h`:
+
+```cpp
+// Pin definitions
+#define RELAY_PIN     13
+#define BUTTON_PIN    4
+#define MAGNET_PIN    27
+#define PN532_RX_PIN  16
+#define PN532_TX_PIN  17
+
+// Timing parameters (milliseconds)
+#define DOOR_CLOSE_CONFIRM_MS   2000  // Door close confirmation time
+#define SAFE_TIMEOUT_MS         10000 // Safety timeout
+#define BUTTON_DEBOUNCE_MS      50    // Button debounce
+#define DOOR_DEBOUNCE_MS        100   // Door sensor debounce
+#define NFC_COOLDOWN_MS         2000  // NFC read cooldown
+#define NFC_READ_TIMEOUT_MS     100   // NFC read timeout
+```
+
+### Troubleshooting
+
+#### NFC not recognized
+- Check if PN532 is configured for HSU mode
+- Confirm TX/RX are cross-connected
+- Check serial logs for PN532 firmware version info
+
+#### Authorization failed
+- Get card UID from serial logs
+- Update authorized card list in `config.h`
+
+#### Relay malfunction
+- Check relay module polarity
+- Verify GPIO13 output level
+
+### Documentation
+
+- [Hardware Wiring Guide](docs/硬件接线指南.md) - Detailed wiring instructions
+- [PlatformIO Upload Guide](docs/PlatformIO烧录指南.md) - Build and upload steps
 
 ### License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
+
+</details>
