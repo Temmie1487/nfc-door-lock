@@ -5,8 +5,8 @@
 #define RELAY_PIN     13
 #define BUTTON_PIN    4
 #define MAGNET_PIN    27
-#define PN532_RX_PIN  16
-#define PN532_TX_PIN  17
+#define PN532_RX_PIN  18
+#define PN532_TX_PIN  19
 
 #define DOOR_CLOSE_CONFIRM_MS   2000
 #define SAFE_TIMEOUT_MS         10000

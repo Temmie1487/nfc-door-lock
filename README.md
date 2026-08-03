@@ -54,8 +54,8 @@ platformio run --target upload
 | 继电器 | GPIO13 | HIGH=开锁，LOW=上锁 |
 | 按钮 | GPIO4 | 按下为LOW |
 | 门磁传感器 | GPIO27 | 关门HIGH，开门LOW |
-| PN532 RX | GPIO16 | ESP32 RX |
-| PN532 TX | GPIO17 | ESP32 TX |
+| PN532 RX | GPIO18 | ESP32 RX |
+| PN532 TX | GPIO19 | ESP32 TX |
 
 > ⚠️ PN532需设置为HSU/UART模式，TX/RX需交叉连接
 
@@ -110,8 +110,8 @@ nfc-door-lock/
 #define RELAY_PIN     13
 #define BUTTON_PIN    4
 #define MAGNET_PIN    27
-#define PN532_RX_PIN  16
-#define PN532_TX_PIN  17
+#define PN532_RX_PIN  18
+#define PN532_TX_PIN  19
 
 // 时间参数（毫秒）
 #define DOOR_CLOSE_CONFIRM_MS   2000  // 关门确认时间
@@ -207,8 +207,8 @@ platformio run --target upload
 | Relay | GPIO13 | HIGH=unlock, LOW=lock |
 | Button | GPIO4 | LOW when pressed |
 | Door Sensor | GPIO27 | HIGH=closed, LOW=open |
-| PN532 RX | GPIO16 | ESP32 RX |
-| PN532 TX | GPIO17 | ESP32 TX |
+| PN532 RX | GPIO18 | ESP32 RX |
+| PN532 TX | GPIO19 | ESP32 TX |
 
 > ⚠️ PN532 must be configured for HSU/UART mode; TX/RX must be cross-connected
 
@@ -263,8 +263,8 @@ All configurations are in `src/config.h`:
 #define RELAY_PIN     13
 #define BUTTON_PIN    4
 #define MAGNET_PIN    27
-#define PN532_RX_PIN  16
-#define PN532_TX_PIN  17
+#define PN532_RX_PIN  18
+#define PN532_TX_PIN  19
 
 // Timing parameters (milliseconds)
 #define DOOR_CLOSE_CONFIRM_MS   2000  // Door close confirmation time
@@ -293,7 +293,7 @@ All configurations are in `src/config.h`:
 #### Upload Failed (Failed to connect to ESP32)
 - **Cause 1:** PN532 connected to GPIO16/17 (UART0) conflicts with upload communication
 - **Cause 2:** PN532 TX/RX are connected backwards (correct: PN532 TXD→ESP32 RXD, PN532 RXD→ESP32 TXD)
-- **Solution:** Check if TX/RX are cross-connected, move PN532 to UART2 pins (GPIO18/19), or disconnect TX/RX cables before uploading
+- **Solution:** This project now uses GPIO18/19 (UART2) by default. If still failing, check if TX/RX are cross-connected
 
 ### Documentation
 
