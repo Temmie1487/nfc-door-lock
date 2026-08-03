@@ -137,6 +137,10 @@ nfc-door-lock/
 - 检查继电器模块极性
 - 确认GPIO13输出电平
 
+### 烧录失败（Failed to connect to ESP32）
+- **原因：** PN532 连接在 GPIO16/17（UART0）会与烧录通信冲突
+- **解决方案：** 将 PN532 换到 UART2 引脚（GPIO18/19），或烧录前拔掉 TX/RX 线
+
 ## 文档
 
 - [硬件接线指南](docs/硬件接线指南.md) - 详细接线说明
@@ -284,6 +288,10 @@ All configurations are in `src/config.h`:
 #### Relay malfunction
 - Check relay module polarity
 - Verify GPIO13 output level
+
+#### Upload Failed (Failed to connect to ESP32)
+- **Cause:** PN532 connected to GPIO16/17 (UART0) conflicts with upload communication
+- **Solution:** Move PN532 to UART2 pins (GPIO18/19), or disconnect TX/RX cables before uploading
 
 ### Documentation
 
