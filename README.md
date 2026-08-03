@@ -138,8 +138,9 @@ nfc-door-lock/
 - 确认GPIO13输出电平
 
 ### 烧录失败（Failed to connect to ESP32）
-- **原因：** PN532 连接在 GPIO16/17（UART0）会与烧录通信冲突
-- **解决方案：** 将 PN532 换到 UART2 引脚（GPIO18/19），或烧录前拔掉 TX/RX 线
+- **原因1：** PN532 连接在 GPIO16/17（UART0）会与烧录通信冲突
+- **原因2：** PN532 的 TX/RX 接反了（正确接法：PN532 TXD→ESP32 RXD，PN532 RXD→ESP32 TXD）
+- **解决方案：** 检查 TX/RX 是否交叉连接，或换到 UART2 引脚（GPIO18/19），烧录前也可拔掉 TX/RX 线
 
 ## 文档
 
@@ -290,8 +291,9 @@ All configurations are in `src/config.h`:
 - Verify GPIO13 output level
 
 #### Upload Failed (Failed to connect to ESP32)
-- **Cause:** PN532 connected to GPIO16/17 (UART0) conflicts with upload communication
-- **Solution:** Move PN532 to UART2 pins (GPIO18/19), or disconnect TX/RX cables before uploading
+- **Cause 1:** PN532 connected to GPIO16/17 (UART0) conflicts with upload communication
+- **Cause 2:** PN532 TX/RX are connected backwards (correct: PN532 TXD→ESP32 RXD, PN532 RXD→ESP32 TXD)
+- **Solution:** Check if TX/RX are cross-connected, move PN532 to UART2 pins (GPIO18/19), or disconnect TX/RX cables before uploading
 
 ### Documentation
 

@@ -21,7 +21,7 @@ struct NFCCard {
 };
 
 static const NFCCard authorizedCards[] = {
-    {{0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}, 4},
+    {{0x71, 0xA1, 0x2A, 0x6D}, 4},
 };
 
 static const int NUM_AUTHORIZED_CARDS = sizeof(authorizedCards) / sizeof(authorizedCards[0]);
